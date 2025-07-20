@@ -1,5 +1,6 @@
 import "./globals.css"; // your styles
 import Navigations from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export const metadata = {
   title: "Canvas Bakery",
@@ -11,7 +12,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Navigations />
+
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
