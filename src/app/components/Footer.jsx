@@ -7,7 +7,7 @@ const lime = Limelight({ subsets: ["latin"], weight: ["400"] });
 export default function Footer() {
   return (
     <div className={lime.className}>
-      <div className="bg-[#e7b6a9] flex justify-evenly w-5/6 h-40 m-auto">
+      <div className="bg-[#e7b6a9] flex justify-evenly w-5/6 h-30 m-auto">
         <div>
           <h1 className="text-xl">Contact me!</h1>
           <p>Phone#972-469-0865</p>

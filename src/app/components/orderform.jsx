@@ -6,6 +6,9 @@ export default function CakeOrderForm() {
     flavor: "",
     frosting: "",
     size: "",
+    shape: "",
+    delivery: "",
+    descriptoin: "",
   });
 
   const handleChange = (e) => {
@@ -27,6 +30,12 @@ export default function CakeOrderForm() {
       onSubmit={handleSubmit}
       className="max-w-md space-y-4 p-4 bg-white rounded shadow"
     >
+      <div>
+        <input placeholder="Name"></input>
+        <input placeholder="Email"></input>
+        <input placeholder="Phone#"></input>
+      </div>
+
       {/* Flavor Dropdown */}
       <div>
         <label
@@ -67,7 +76,7 @@ export default function CakeOrderForm() {
           onChange={handleChange}
           required
         >
-          <option value="">-- Select frosting --</option>
+          <option value="">--Select frosting--</option>
           <option value="buttercream">Buttercream</option>
           <option value="cream cheese">Cream Cheese</option>
           <option value="ganache">Ganache</option>
@@ -88,13 +97,55 @@ export default function CakeOrderForm() {
           onChange={handleChange}
           required
         >
-          <option value="">-- Select size --</option>
-          <option value="6-inch">6-inch (Small)</option>
+          <option value="">--Select size--</option>
+          <option value="6-inch">6-inch (Small-Serves up to 10)</option>
           <option value="8-inch">8-inch (Medium)</option>
           <option value="10-inch">10-inch (Large)</option>
         </select>
       </div>
+      {/* Cake shape*/}
+      <div>
+        <label htmlFor="size" className="block mb-1 font-medium text-gray-700">
+          Cake Shape
+        </label>
+        <select
+          name="shape"
+          id="shape"
+          className="w-full border rounded p-2"
+          value={formData.shape}
+          onChange={handleChange}
+          required
+        >
+          <option value=""> --Select shape--</option>
+          <option value="heart">Heart</option>
+          <option value="circle">Circle</option>
+          <option value="square">Square</option>
+          <option value="other">Other</option>
+        </select>
+        {/* Allergies*/}
+        <div>
+          <label>
+            Please list any allergies that you or anyone consuming the cake may
+            have
+          </label>
+          <input></input>
+        </div>
+      </div>
+      {/*  Description and inspo images*/}
+      <div>
+        <label>
+          Give a brief description of the design of the cake and add image in
+          any for inspo
+        </label>
+        <input></input>
+      </div>
 
+      {/* delivery or pickup */}
+      <button>Pickup</button>
+      <button>Delivery</button>
+      {/* Terms and conditions  */}
+      <button></button>
+      <label>i have read the terms and conditions</label>
       {/* Submit Button */}
       <button
         type="submit"
