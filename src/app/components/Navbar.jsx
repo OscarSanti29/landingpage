@@ -6,7 +6,7 @@ export default function Navigations() {
     <div className={lime.className}>
       <div className="flex justify-evenly text-xl bg-[#e7b6a9] w-5/6 m-auto">
         <Link href={"/"}>Home</Link>
-        <Link href={"/ordering"}>How to Order</Link>
+        <Link href={"/ordering"}>Send a Request</Link>
       </div>
     </div>
   );

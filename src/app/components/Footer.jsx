@@ -17,16 +17,16 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="flex flex-row"
           >
-            <FontAwesomeIcon icon={faInstagram} className="w-8 h-8" />
-            <p className="text-lg">canvas.bakery</p>
+            <FontAwesomeIcon icon={faInstagram} className="" />
+            <p className="">canvas.bakery</p>
           </a>
         </div>
 
-        <p>
+        <p className="text-lg">
           <Link href={"/faq"}>FAQ</Link>
         </p>
 
-        <p>Based in Dallas, Tx 75228</p>
+        <p className="text-lg">Based in Dallas, Tx 75228</p>
       </div>
     </div>
   );
