@@ -1,48 +1,140 @@
 "use client";
-import { useState } from "react";
-import { Limelight } from "next/font/google";
-const lime = Limelight({ subsets: ["latin"], weight: ["400"] });
+
+import React, { useState } from "react";
+import * as emailjs from "emailjs-com";
 
 export default function CakeOrderForm() {
   const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
     flavor: "",
-    frosting: "",
     filling: "",
+    frosting: "",
     size: "",
     shape: "",
-    delivery: "",
-    descriptoin: "",
+    description: "",
+    allergies: "",
+    deliveryMethod: "",
+    terms: false,
+    inspirationImage: null,
   });
 
+  const [imagePreview, setImagePreview] = useState(null);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, type, checked, files } = e.target;
+
+    if (type === "checkbox") {
+      setFormData({ ...formData, [name]: checked });
+    } else if (type === "file") {
+      const file = files[0];
+      setFormData({ ...formData, [name]: file });
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => setImagePreview(reader.result);
+        reader.readAsDataURL(file);
+      } else {
+        setImagePreview(null);
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    emailjs
+      .send(
+        "service_tftlup2",
+        "template_2f6ntuk",
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          flavor: formData.flavor,
+          filling: formData.filling,
+          frosting: formData.frosting,
+          size: formData.size,
+          shape: formData.shape,
+          delivery: formData.deliveryMethod,
+          allergies: formData.allergies,
+          description: formData.description,
+          terms: formData.terms,
+          inspirationImage: formData.inspirationImage,
+        },
+
+        "bEGHdDglJNbNzDQU0"
+      )
+      .then(
+        (result) => {
+          console.log("Email sent succesfully", result.text);
+          alert("Your Request has been sent!");
+        },
+        (error) => {
+          console.error("Email send error", error.text);
+          alert("oops something went wrong. Please try again.");
+        }
+      );
     console.log("Form submitted:", formData);
-    // You can later send this to EmailJS, a backend, etc.
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className=" m-auto my-8 max-w-2xl bg-[#ffe7e0b8] p-8 rounded-xl shadow-xl"
+      className="max-w-lg mx-auto my-8 p-6 bg-[#ffe7e0b8] shadow-lg rounded-lg"
     >
-      <h1 className={`${lime.className} text-3xl text-center`}>Request Form</h1>
-      <div className="flex flex-col">
-        <input className="my-2" placeholder="Name"></input>
-        <input className="my-2" placeholder="Email"></input>
-        <input className="my-2" placeholder="Phone#"></input>
+      <h2 className="text-2xl font-bold mb-4">Cake Order Form</h2>
+
+      {/* Contact Info */}
+      <div className="mb-4">
+        <label htmlFor="name" className="block font-medium mb-1">
+          Name
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="w-full border rounded-lg p-2"
+        />
       </div>
 
-      {/* Flavor Dropdown */}
-      <div className="my-4">
-        <label htmlFor="flavor" className="font-medium text-gray-700 text-lg">
+      <div className="mb-4">
+        <label htmlFor="email" className="block font-medium mb-1">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="w-full border rounded-lg p-2"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="phone" className="block font-medium mb-1">
+          Phone
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+          className="w-full border rounded-lg p-2"
+        />
+      </div>
+
+      {/* Cake Details */}
+      <div className="mb-4">
+        <label htmlFor="flavor" className="block font-medium mb-1">
           Cake Flavor
         </label>
         <select
@@ -76,10 +168,9 @@ export default function CakeOrderForm() {
         </select>
       </div>
 
-      {/* Filling Dropdown */}
-
-      <div className="my-4">
-        <label htmlFor="filling" className="font-medium text-gray-700 text-lg">
+      {/* Filling */}
+      <div className="mb-4">
+        <label htmlFor="filling" className="block font-medium mb-1">
           Filling
         </label>
         <select
@@ -118,9 +209,9 @@ export default function CakeOrderForm() {
         </select>
       </div>
 
-      {/* Frosting Dropdown */}
-      <div className="my-4">
-        <label htmlFor="frosting" className="font-medium text-gray-700 text-lg">
+      {/* Frosting */}
+      <div className="mb-4">
+        <label htmlFor="frosting" className="block font-medium mb-1">
           Frosting
         </label>
         <select
@@ -141,7 +232,7 @@ export default function CakeOrderForm() {
         </select>
       </div>
 
-      {/* Size Dropdown */}
+      {/* Size */}
       <div className="my-4">
         <label htmlFor="size" className="font-medium text-gray-700 text-lg">
           Cake Size
@@ -161,9 +252,11 @@ export default function CakeOrderForm() {
           <option value="10-inch">10-inch (Large-serves up to 35)</option>
         </select>
       </div>
-      {/* Cake shape*/}
+
+      {/* Shape */}
       <div className="my-4">
         <label htmlFor="size" className="font-medium text-gray-700 text-lg">
+          {" "}
           Cake Shape
         </label>
         <select
@@ -180,42 +273,106 @@ export default function CakeOrderForm() {
           <option value="square">Square</option>
           <option value="other">Other (additional cost)</option>
         </select>
-        {/* Allergies*/}
-        <div className="my-4">
-          <label>
-            Please list any allergies that you or anyone consuming the cake may
-            have
-          </label>
-          <input></input>
-        </div>
       </div>
-      {/*  Description and inspo images*/}
-      <div className="my-4">
-        <label>
-          Give a brief description of the design of the cake and add image in
-          any for inspo
+
+      {/* Description */}
+      <div className="mb-4">
+        <label htmlFor="description" className="block font-medium mb-1">
+          Description / Special Requests
         </label>
-        <input></input>
+        <textarea
+          id="description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          className="w-full border rounded-lg p-2"
+        />
       </div>
 
-      {/* delivery or pickup */}
-      <div>
-        <button>Pickup</button>
-        <button>Delivery</button>
+      {/* Allergies */}
+      <div className="mb-4">
+        <label htmlFor="allergies" className="block font-medium mb-1">
+          Allergies
+        </label>
+        <textarea
+          id="allergies"
+          name="allergies"
+          value={formData.allergies}
+          onChange={handleChange}
+          className="w-full border rounded-lg p-2"
+        />
       </div>
 
-      {/* Terms and conditions  */}
-      <button></button>
-      <label>i have read the terms and conditions</label>
-      {/* Submit Button */}
-      <div>
-        <button
-          type="submit"
-          className="bg-[#e7b6a9] font-medium px-4 py-2 my-4 rounded-xl shadow-lg cursor-pointer"
-        >
-          Send Request
-        </button>
+      {/* Delivery Method */}
+      <div className="mb-4">
+        <span className="block font-medium mb-1">Delivery Method</span>
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="deliveryMethod"
+            value="pickup"
+            checked={formData.deliveryMethod === "pickup"}
+            onChange={handleChange}
+            className="cursor-pointer"
+            required
+          />
+          Pickup
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="deliveryMethod"
+            value="delivery"
+            checked={formData.deliveryMethod === "delivery"}
+            onChange={handleChange}
+            className="cursor-pointer"
+          />
+          Delivery
+        </label>
       </div>
+
+      {/* File Upload */}
+      <div className="mb-4">
+        <label htmlFor="inspirationImage" className="block font-medium mb-1">
+          Inspiration Image (optional)
+        </label>
+        <input
+          id="inspirationImage"
+          name="inspirationImage"
+          type="file"
+          accept="image/*"
+          onChange={handleChange}
+          className="w-full"
+        />
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="mt-2 rounded-lg border w-full object-cover"
+          />
+        )}
+      </div>
+
+      {/* Terms */}
+      <div className="mb-4 flex items-center gap-2">
+        <input
+          type="checkbox"
+          id="terms"
+          name="terms"
+          className="cursor-pointer"
+          checked={formData.terms}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor="terms">I agree to the terms and conditions</label>
+      </div>
+
+      <button
+        type="submit"
+        className="bg-white cursor-pointer px-4 py-2 rounded-lg"
+      >
+        Submit Order
+      </button>
     </form>
   );
 }
